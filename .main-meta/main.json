@@ -1,0 +1,55 @@
+{
+    "metaDataVersion": "1.0.0",
+    "category": "com.microchip.ide.project",
+    "content": {
+        "metaDataVersion": "1.1.0",
+        "name": "com.microchip.mcu8.mplabx.project.attiny1627-bare-metal-twi-mplab",
+        "version": " ",
+        "displayName": "",
+        "projectName": "attiny1627-bare-metal-twi-mplab",
+        "shortDescription": "This example provides bare metal reference drivers for the Two Wire Interface TWI on the ATtiny1627 family of MCUs",
+        "ide": {
+            "name": "MPLAB X",
+            "semverRange": ">=5.50.0"
+        },
+        "compiler": [
+            {
+                "name": "XC8",
+                "semverRange": "^2.32.0"
+            }
+        ],
+        "dfp": {
+            "name": "",
+            "semverRange": ""
+        },
+        "configurator": {
+            "name": "",
+            "semverRange": ""
+        },
+        "device": {
+            "metaDataVersion": "1.0.0",
+            "category": "com.microchip.portal.contentRef",
+            "content": {
+                "metaDataVersion": "1.0.0",
+                "category": "com.microchip.device",
+                "name": "ATtiny1627",
+                "versionRange": "*"
+            }
+        },
+        "author": "Robert Perkel",
+        "subcategories": [],
+        "peripherals": [],
+        "keywords": [],
+        "additionalData": {
+            "longDescription": {
+                "metaDataVersion": "1.0.0",
+                "category": "com.microchip.portal.fileRef",
+                "content": {
+                    "metaDataVersion": "1.0.0",
+                    "fileName": "./README.md",
+                    "mimeType": "text/markdown"
+                }
+            }
+        }
+    }
+}
