@@ -10,7 +10,7 @@
         "shortDescription": "This example provides bare metal reference drivers for the Two Wire Interface TWI on the ATtiny1627 family of MCUs",
         "ide": {
             "name": "MPLAB X",
-            "semverRange": ">=6.00.0"
+            "semverRange": ">=6.0.0"
         },
         "compiler": [
             {
