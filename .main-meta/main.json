@@ -29,7 +29,7 @@
             "content": {
                 "metaDataVersion": "1.0.0",
                 "category": "com.microchip.device",
-                "name": "ATtiny1627",
+                "name": "ATTINY1627",
                 "versionRange": "*"
             }
         },
