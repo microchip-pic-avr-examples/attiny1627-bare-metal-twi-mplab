@@ -4,8 +4,8 @@
     "content": {
         "metaDataVersion": "1.3.0",
         "name": "com.microchip.mcu8.mplabx.project.attiny1627-bare-metal-twi-mplab",
-        "version": "1.0.0",
-        "displayName": "Bare Metal TWI Driver for the AVR DB Family of MCUs",
+        "version": "1.0.1",
+        "displayName": "Bare Metal TWI Driver for the ATtiny1627 Family of MCUs",
         "projectName": "attiny1627-bare-metal-twi-mplab",
         "shortDescription": "This example provides bare metal reference drivers for the Two Wire Interface TWI on the ATtiny1627 family of MCUs",
         "ide": {
