@@ -18,10 +18,13 @@
 
 #define TWI_WAIT() while (!((TWI_IS_CLOCKHELD()) || (TWI_IS_BUSERR()) || (TWI_IS_ARBLOST()) || (TWI_IS_BUSBUSY())))
 
+#define TWI_STOP() {TWI0.MCTRLB |= TWI_MCMD_STOP_gc; while ((TWI0.MSTATUS & TWI_BUSSTATE_gm) != TWI_BUSSTATE_IDLE_gc); }
+
 bool isTWIBad(void)
 {
+    
     //Checks for: NACK, ARBLOST, BUSERR, Bus Busy
-    if ((((TWI0.MSTATUS) & (TWI_RXACK_bm | TWI_ARBLOST_bm | TWI_BUSERR_bm)) > 0)
+    if (((TWI0.MSTATUS & (TWI_RXACK_bm | TWI_ARBLOST_bm | TWI_BUSERR_bm)) != 0)
             || (TWI_IS_BUSBUSY()))
     {
         return true;
@@ -44,8 +47,8 @@ void TWI_initHost(void)
     TWI0.MSTATUS = TWI_RIF_bm | TWI_WIF_bm | TWI_CLKHOLD_bm | TWI_RXACK_bm |
             TWI_ARBLOST_bm | TWI_BUSERR_bm | TWI_BUSSTATE_IDLE_gc;
     
-    //Set for 100kHz from a 4MHz oscillator
-    TWI0.MBAUD = 15;
+    //Set for 100kHz from a 16MHz oscillator, CLKDIV = 6x
+    TWI0.MBAUD = 8;
     
     //[No ISRs] and Host Mode
     TWI0.MCTRLA = TWI_ENABLE_bm;
@@ -53,15 +56,15 @@ void TWI_initHost(void)
 
 void TWI_initPins(void)
 {
-    //PB1/PB2
+    //PB1/PB0
         
     //Output I/O
-    PORTB.DIRSET = PIN1_bm | PIN2_bm;
+    PORTB.DIRSET = PIN1_bm | PIN0_bm;
 
 #ifdef TWI_ENABLE_PULLUPS
     //Enable Pull-Ups
     PORTB.PIN1CTRL = PORT_PULLUPEN_bm;
-    PORTB.PIN2CTRL = PORT_PULLUPEN_bm;
+    PORTB.PIN0CTRL = PORT_PULLUPEN_bm;
 #endif
 }
 
@@ -82,7 +85,7 @@ bool _startTWI(uint8_t addr, bool read)
     if (isTWIBad())
     {
         //Stop the Bus
-        TWI0.MCTRLB = TWI_MCMD_STOP_gc;
+        TWI_STOP();
         return false;
     }
     
@@ -153,12 +156,15 @@ bool TWI_sendByte(uint8_t addr, uint8_t data)
 {
     //Address Client Device (Write)
     if (!_startTWI(addr, TWI_WRITE))
+    {
+        TWI_STOP();
         return false;
+    }
     
     bool success = _writeToTWI(&data, 1);
     
     //Stop the bus
-    TWI0.MCTRLB = TWI_MCMD_STOP_gc;
+    TWI0.MCTRLB = TWI_ACKACT_NACK_gc | TWI_MCMD_STOP_gc;
     
     return success;
 }
@@ -167,16 +173,18 @@ bool TWI_sendBytes(uint8_t addr, uint8_t* data, uint8_t len)
 {
     //Address Client Device (Write)
     if (!_startTWI(addr, TWI_WRITE))
+    {
+        TWI_STOP();
         return false;
+    }
+        
     
     //Write the bytes to the client
     bool success = _writeToTWI(data, len);
 
     //Stop the bus
-    TWI0.MCTRLB = TWI_MCMD_STOP_gc;
-    
-    
-    
+    TWI_STOP();
+        
     return success;
 }
 
@@ -184,7 +192,11 @@ bool TWI_readByte(uint8_t addr, uint8_t* data)
 {
     //Address Client Device (Read)
     if (!_startTWI(addr, TWI_READ))
+    {
+        TWI_STOP();
         return false;
+    }
+        
     
     //Read byte from client
     _readFromTWI(data, 1);
@@ -197,7 +209,11 @@ bool TWI_readBytes(uint8_t addr, uint8_t* data, uint8_t len)
 {
     //Address Client Device (Read)
     if (!_startTWI(addr, TWI_READ))
+    {
+        TWI_STOP();
         return false;
+    }
+        
     
     //Read bytes from client
     _readFromTWI(data, len);
@@ -209,18 +225,21 @@ bool TWI_sendAndReadBytes(uint8_t addr, uint8_t regAddress, uint8_t* data, uint8
 {
     //Address Client Device (Write)
     if (!_startTWI(addr, TWI_WRITE))
+    {
+        TWI_STOP();
         return false;
+    }
         
     //Write register address
     if (!_writeToTWI(&regAddress, 1))
     {
-        TWI0.MCTRLB = TWI_MCMD_STOP_gc;
+        TWI_STOP();
         return false;
     }
     
     //Restart the TWI Bus in READ mode
     TWI0.MADDR |= TWI_READ;
-    TWI0.MCTRLB = TWI_MCMD_REPSTART_gc;
+    TWI0.MCTRLB |= TWI_MCMD_REPSTART_gc;
     
     //Wait...
     TWI_WAIT();
@@ -234,6 +253,8 @@ bool TWI_sendAndReadBytes(uint8_t addr, uint8_t regAddress, uint8_t* data, uint8
     
     //Read the data from the client
     _readFromTWI(data, len);
+    
+    TWI_STOP();
     
     return true;
 }

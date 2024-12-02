@@ -14,8 +14,8 @@ This code example provides a simple bare-metal TWI driver for the ATtiny1627 fam
 
 ## Software Used
 
-- [MPLAB&reg; X IDE v6.0.0 or newer](https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide?utm_source=GitHub&utm_medium=TextLink&utm_campaign=MCU8_MMTCha_attiny1627&utm_content=attiny1627-bare-metal-twi-mplab)
-- [MPLAB XC8 v2.35.0 or newer](https://www.microchip.com/en-us/tools-resources/develop/mplab-xc-compilers?utm_source=GitHub&utm_medium=TextLink&utm_campaign=MCU8_MMTCha_attiny1627&utm_content=attiny1627-bare-metal-twi-mplab)
+- [MPLAB&reg; X IDE v6.3.0 or newer](https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide?utm_source=GitHub&utm_medium=TextLink&utm_campaign=MCU8_MMTCha_attiny1627&utm_content=attiny1627-bare-metal-twi-mplab)
+- [MPLAB XC8 v3.0.0 or newer](https://www.microchip.com/en-us/tools-resources/develop/mplab-xc-compilers?utm_source=GitHub&utm_medium=TextLink&utm_campaign=MCU8_MMTCha_attiny1627&utm_content=attiny1627-bare-metal-twi-mplab)
 
 ## Hardware Used
 
@@ -38,8 +38,8 @@ This code example provides a simple bare-metal TWI driver for the ATtiny1627 fam
 
 | Pin | Function
 | --- | -------
-| PA2 | SDA
-| PA3 | SCL
+| PB1 | SDA
+| PB0 | SCL
 
 ## Host Mode
 
